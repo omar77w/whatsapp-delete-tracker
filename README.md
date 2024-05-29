@@ -1,6 +1,6 @@
 ### Tired of people deleting their WhatsApp messages?
 
-This Python program detects message deletions in your WhatsApp and provide you with a copy of the deleted message.
+This Python program detects message deletions in your WhatsApp conversations and provides you with a copy of the deleted message.
 This is done by continously tracking (using Selenium library) and storing your recent WhatsApp messages, all locally, of course. The program works on WhatsApp's web client (https://web.whatsapp.com) using Firefox or Chrome.
 
 There are two files:
