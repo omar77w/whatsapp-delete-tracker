@@ -10,6 +10,10 @@ import time
 
 
 options = Options()
+"""
+Adding a profile allows you to save cookies and skip scanning QR Code every time you run the program.
+Look here for more details: https://medium.com/@stevedep/send-whatsapp-messages-with-python-selenium-on-odroid-using-firefox-d50c6e3f697e
+"""
 #options.add_argument('-profile')
 #options.add_argument('C:\\Users\\USER\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\pfg80jo8.python profile')
 

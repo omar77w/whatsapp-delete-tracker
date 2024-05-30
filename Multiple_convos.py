@@ -8,8 +8,11 @@ from selenium.webdriver.firefox.options import Options
 
 import time
 
-
 options = Options()
+"""
+Adding a profile allows you to save cookies and skip scanning QR Code every time you run the program.
+Look here for more details: https://medium.com/@stevedep/send-whatsapp-messages-with-python-selenium-on-odroid-using-firefox-d50c6e3f697e
+"""
 #options.add_argument('-profile')
 #options.add_argument('C:\\Users\\USER\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\pfg80jo8.python profile')
 
@@ -54,9 +57,9 @@ for convo in convos[1:]:   #Start from 1 to skip "Archive"
     dels = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw") #The number of messages that say "This message has been deleted"
     for i in texts:
         dict1[i] = i.text
-    #Scroll up
+    #Scroll up to load more messages
     for i in range(3):
-        driver.find_element(By.TAG_NAME, ('body')).send_keys(Keys.PAGE_UP) #Goes up to top of messages to expand dict2
+        driver.find_element(By.TAG_NAME, ('body')).send_keys(Keys.PAGE_UP)
         texts2 = driver.find_elements(By.CSS_SELECTOR, "div.message-in.focusable-list-item._amjy._amjw")
         dels2 = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw")
         for j in texts2:
@@ -90,11 +93,11 @@ while True:
         dict2 = {}
         texts = driver.find_elements(By.CSS_SELECTOR, "div.message-in.focusable-list-item._amjy._amjw")
         dels = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw")
-        for i in texts: #Add text in first view to the dictionary
+        for i in texts:
             dict2[i] = i.text
-        #Scroll up
+        #Scroll up to load more messages
         for i in range(3):
-            driver.find_element(By.TAG_NAME, ('body')).send_keys(Keys.PAGE_UP) #Goes up to top of messages to expand dict2
+            driver.find_element(By.TAG_NAME, ('body')).send_keys(Keys.PAGE_UP)
             texts2 = driver.find_elements(By.CSS_SELECTOR, "div.message-in.focusable-list-item._amjy._amjw")
             dels2 = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw")
             for j in texts2:
