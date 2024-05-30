@@ -1,4 +1,5 @@
 import sys
+import ctypes
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -95,12 +96,13 @@ while True:
     num_dels2 = len(dels)
 
     #Compare to first scan
-    if dict1 != dict2 and num_dels2 > num_dels1:  #If the before and after dictionaries aren't the same *and8 the number of deleted messages in 2nd scan is more than 1st:
+    if dict1 != dict2 and num_dels2 > num_dels1:  #If the before and after dictionaries aren't the same *and* the number of deleted messages in 2nd scan is more than 1st:
         for i in dict1:
             if i not in dict2:
                 print("A message has been deleted!")
                 print("Deleted message is:")
                 print(dict1[i])
+                ctypes.windll.user32.MessageBoxW(0, "A message has been deleted!\n\nDeleted message is:\n{}".format(dict1[i]), "Message deleted!", 1)
 
-    dict1 = dict2  #Second scan is now the first one to repeat loop
+    dict1 = dict2.copy()  #Second scan is now the first one to repeat loop
     num_dels1 = num_dels2
