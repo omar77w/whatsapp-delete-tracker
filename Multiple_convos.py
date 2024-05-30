@@ -10,16 +10,16 @@ import time
 
 
 options = Options()
-options.add_argument('-profile')
-options.add_argument('C:\\Users\\Omar Arab\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\pfg80jo8.python profile')
+#options.add_argument('-profile')
+#options.add_argument('C:\\Users\\USER\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\pfg80jo8.python profile')
 
-driver = webdriver.Firefox(options=options)
+driver = webdriver.Firefox(options=options)    #For Chrome, replace "Firefox" with "Chrome"
 
 driver.get("https://web.whatsapp.com")
 
 try:
     print("Please log into WhatsApp...\n")
-    WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "side"))) #You have 60 seconds to login
+    WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, "side"))) #You have 120 seconds to login
 except:
     print("You did not log in. Session timed out.")
     driver.quit()
@@ -34,24 +34,25 @@ except:
     driver.quit()
     sys.exit(1)
 
-time.sleep(20) #Wait ~20 seconds to load conversations
+time.sleep(20) #Wait ~20 seconds for conversations to load
 print("Scanning...")
 
-convos = driver.find_elements(By.CLASS_NAME, "_ak8q") #List of conversations
+convos = driver.find_elements(By.CLASS_NAME, "_ak8q")  #List of conversations' page elements
 users = {}
 
-# Dict 1 loop:
-for convo in convos[1:]:
+#First scan of all convos:
+for convo in convos[1:]:   #Start from 1 to skip "Archive"
     if convo not in users:
-        users[convo.text] = [0,0,0,0] #initialize values of dict1 and dict2
+        users[convo.text] = [0,0,0,0]    #Initialize 4 list items. These will store the scans and number of deleted messages, before and after.
 
     driver.execute_script("arguments[0].scrollIntoView();", convo)
     convo.click()
 
+    #Scan conversations and store in dict1
     dict1 = {}
     texts = driver.find_elements(By.CSS_SELECTOR, "div.message-in.focusable-list-item._amjy._amjw")
-    dels = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw")
-    for i in texts: #Add text in first view to the dictionary
+    dels = driver.find_elements(By.CSS_SELECTOR, "div._akbu._akbw") #The number of messages that say "This message has been deleted"
+    for i in texts:
         dict1[i] = i.text
     #Scroll up
     for i in range(3):
@@ -72,9 +73,9 @@ for convo in convos[1:]:
         searchbar_item = convo.text
 
 
-# Dict 2 loop and check differences
+# Second scan of all conversations
 while True:
-    #Go to top of chat list
+    #Go to top of chat list:
     searchbar = driver.find_element(By.XPATH, "/html/body/div[1]/div/div/div[2]/div[3]/div/div[1]/div/div[2]/div[2]/div/div[1]")
     for i in searchbar_item:
         searchbar.send_keys(i)
@@ -106,14 +107,14 @@ while True:
         users[user][1] = dict2
         users[user][3] = len(dels)
 
-        #Compare to dict1
-        if users[user][0] != users[user][1] and users[user][3] > users[user][2]: #If dict1 and dict2 aren't the same + the number of deleted messages in dict2 is more than dic1:
+        #Compare to first scan
+        if users[user][0] != users[user][1] and users[user][3] > users[user][2]: #If the before and after dictionaries aren't the same *and8 the number of deleted messages in 2nd scan is more than 1st:
             for i in users[user][0]:
                 if i not in users[user][1]:
                     print("A message has been deleted! By: " + user)
                     print("Deleted message is:")
                     print(users[user][0][i])
     
-        users[user][0] = users[user][1]
+        users[user][0] = users[user][1]  #Second scan is now the first one to repeat loop
         users[user][2] = users[user][3]
 
